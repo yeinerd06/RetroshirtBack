@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import co.com.api.wise_stock.entity.Articulo;
+import co.com.api.wise_stock.entity.ArticuloColor;
+import co.com.api.wise_stock.repository.ArticuloColorRepository;
 import co.com.api.wise_stock.repository.ArticuloRepository;
 import co.com.api.wise_stock.repository.ProveedorRepository;
 import co.com.api.wise_stock.util.AWSS3Service;
@@ -17,6 +19,8 @@ import co.com.api.wise_stock.util.Response;
 public class ArticuloService {
 	@Autowired
 	ArticuloRepository articuloRepository;
+	@Autowired
+	ArticuloColorRepository articuloColorRepository;
 
 	@Autowired
 	ProveedorRepository proveedorRepository;
@@ -38,10 +42,15 @@ public class ArticuloService {
 				articulo.setImagen(urlImagen);
 
 			}
-			articulo.setCategoria(articulo.getCategoria().toUpperCase());
+			articulo.setCategoria(articulo.getCategoria());
 			articulo.setFechaResgistro(new Date());
-
-			return Response.crear(true, "Articulo registrado", articuloRepository.save(articulo));
+			Articulo articuloReturn=articuloRepository.save(articulo);
+			for (ArticuloColor articuloColor : articulo.getColores()) {
+				articuloColor.setArticulo(articuloReturn);
+				articuloColorRepository.save(articuloColor);
+				
+			}
+			return Response.crear(true, "Articulo registrado",articuloReturn );
 		} catch (Exception e) {
 			return Response.crear(false, "error registrado articulo", e);
 			// TODO: handle exception
@@ -62,7 +71,6 @@ public class ArticuloService {
 			
 			articuloReturn.setCategoria(articulo.getCategoria());
 			articuloReturn.setNombre(articulo.getNombre());
-			articuloReturn.setMarca(articulo.getMarca());
 			articuloReturn.setPrecio(articulo.getPrecio());
 			articuloReturn.setStock(articulo.getStock());
 			articuloReturn.setCantidadMinima(articulo.getCantidadMinima());
