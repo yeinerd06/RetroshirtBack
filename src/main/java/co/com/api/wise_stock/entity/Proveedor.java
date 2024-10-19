@@ -40,6 +40,8 @@ public class Proveedor {
 	@Column(name="estado",nullable = true)
 	private Boolean estado;
 	private Date fecha;
+	@OneToMany(mappedBy = "articulo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ProveedorArticulo> productos;
 	
 
 }

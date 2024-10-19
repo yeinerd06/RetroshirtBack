@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.com.api.wise_stock.entity.Proveedor;
+import co.com.api.wise_stock.entity.ProveedorArticulo;
 import co.com.api.wise_stock.service.ProveedorService;
 import co.com.api.wise_stock.util.Response;
 
@@ -30,6 +31,13 @@ public class ProveedorController {
 	public Response saveProveedor(@RequestBody Proveedor proveedor) {
 		return proveedorService.saveProveedor(proveedor);
 	}
+	
+	@PostMapping("/articulo/save")
+	public Response saveProveedor(@RequestBody ProveedorArticulo proveedorArticulo) {
+		return proveedorService.saveProveedorArticulo(proveedorArticulo);
+	}
+	
+	
 	@PutMapping("/update")
 	public Response updateProveedor(@RequestBody Proveedor proveedor) {
 		return proveedorService.updateProveedor(proveedor);

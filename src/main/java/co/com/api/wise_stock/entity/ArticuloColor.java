@@ -1,6 +1,7 @@
 package co.com.api.wise_stock.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,9 +18,9 @@ public class ArticuloColor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@ManyToOne
-	@JoinColumn(name="articulo_id")
-	private Articulo articulo;
+	//@ManyToOne
+	@Column(name="articulo_id")
+	private Integer articulo;
 	@ManyToOne
 	@JoinColumn(name="color_id")
 	private Color color;

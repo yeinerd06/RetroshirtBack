@@ -2,6 +2,7 @@ package co.com.api.wise_stock.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,13 +23,15 @@ public class ProveedorArticulo {
 
 	private Integer id;
 	
-	private Integer proveedorId;
+	@Column(name="proveedor_id")
+	private Integer proveedor;
 
 	@ManyToOne
 	@JoinColumn(name = "articulo_id")
 	private Articulo articulo;
 
-	private Date fechaPedido;
-	private Integer cantidad;
+	private Date fechaRegistro;
+	@Column(nullable = true)
+	private Boolean estado;
 
 }

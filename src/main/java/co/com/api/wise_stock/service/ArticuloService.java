@@ -46,7 +46,7 @@ public class ArticuloService {
 			articulo.setFechaResgistro(new Date());
 			Articulo articuloReturn=articuloRepository.save(articulo);
 			for (ArticuloColor articuloColor : articulo.getColores()) {
-				articuloColor.setArticulo(articuloReturn);
+				articuloColor.setArticulo(articuloReturn.getId());
 				articuloColorRepository.save(articuloColor);
 				
 			}
