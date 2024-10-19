@@ -35,7 +35,7 @@ public class ProveedorService {
 			return Response.crear(true, "Save Proveedor", proveedorRepository.save(proveedor));
 		}
 		public Response saveProveedorArticulo(ProveedorArticulo proveedorArticulo) {
-			
+			System.out.println(proveedorArticulo);
 			Optional<Articulo>articulo=articuloRepository.findById(proveedorArticulo.getArticulo().getId());
 			if(!articulo.isPresent()) {
 				return Response.crear(false, "Articulo no esta registrado", null);

@@ -8,27 +8,34 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Data;
+
 @Entity
 @Data
-public class ArticuloColorTalla {
+public class ProveedorPedidoArticulo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name="proveedor_pedido_id")
+	private Integer proveedorPedido;
 	@ManyToOne
-	@JoinColumn(name = "articulo_color_id")
-	@JsonIgnoreProperties("tallas")
-	private ArticuloColor articuloColor;
+	@JoinColumn(name="proveedor_articulo_id")
+	private ProveedorArticulo proveedorArticulo;
+	@ManyToOne
+	@JoinColumn(name="color_id")
+	private Color color;
 	@ManyToOne
 	@JoinColumn(name="talla_id")
 	private Talla talla;
-	private Integer stock;
+	private Integer cantidad;
 	@Column(nullable = true)
-	private Double precio;
-	
+	private Boolean confirmado;
+	@Column(nullable = true)
+	private Boolean devolucion;
+	@Column(nullable = true)
+	private Integer cantidadDevolucion;
+	@Column(nullable = true)
+	private String motivoDevolucion;
 
 }

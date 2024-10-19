@@ -10,4 +10,5 @@ public interface ProveedorArticuloRepository extends JpaRepository<ProveedorArti
 	 @Query("SELECT COUNT(pa) > 0 FROM ProveedorArticulo pa WHERE pa.proveedor = :proveedorId AND pa.articulo.id = :articuloId")
 	    boolean existsByProveedorAndArticulo(@Param("proveedorId") Integer proveedorId, @Param("articuloId") Integer articuloId);
 
+	 
 }
