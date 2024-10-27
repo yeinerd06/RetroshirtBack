@@ -26,6 +26,7 @@ public class ProveedorPedido {
 	private String uuid;
 	@Column(nullable = true)
 	private Integer codigoFactura;
+	@Column(nullable = true)
 	private Integer total;
 	@ManyToOne
 	@JoinColumn(name="usuario_id")
@@ -39,13 +40,16 @@ public class ProveedorPedido {
 	private Date fechaEntrega;
 	@Column(nullable = true)
 	private Boolean pedidoPendiente;
+	@Column(nullable = true)
 	private Boolean estadoPedido;
+	@Column(nullable = true)
 	private String nota;
+	@Column(nullable = true)
 	private Date fechaRegistro;
-	@OneToMany(mappedBy = "proveedorPedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<ProveedorPedidoArticulo> productos;
 	@Column(nullable = true)
 	private Boolean devolucion;
+	@OneToMany(mappedBy = "proveedorPedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ProveedorPedidoArticulo> productos;
 	
 
 }

@@ -29,7 +29,8 @@ public class ProveedorArticulo {
 	@ManyToOne
 	@JoinColumn(name = "articulo_id")
 	private Articulo articulo;
-
+	
+	private Integer precioCompra;
 	private Date fechaRegistro;
 	@Column(nullable = true)
 	private Boolean estado;

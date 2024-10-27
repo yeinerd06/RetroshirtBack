@@ -22,6 +22,9 @@ public class ProveedorPedidoArticulo {
 	@ManyToOne
 	@JoinColumn(name="proveedor_articulo_id")
 	private ProveedorArticulo proveedorArticulo;
+	@ManyToOne(optional = true)
+	@JoinColumn(name="devolucion_proveedor_id")
+	private DevolucionProveedor devolucionProveedor;
 	@ManyToOne
 	@JoinColumn(name="color_id")
 	private Color color;
