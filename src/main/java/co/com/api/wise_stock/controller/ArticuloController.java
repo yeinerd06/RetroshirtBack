@@ -36,7 +36,6 @@ public class ArticuloController {
 		return articuloService.saveArticulo(articulo, file);
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/update")
 	public Response updateArticulo(@RequestPart("articulo") Articulo articulo, @RequestPart(value="file", required = false) MultipartFile file) {
 		System.err.print(articulo.toString());
