@@ -86,7 +86,7 @@ public class PedidoProveedorService {
 	public Response confirmarPedidoProveedor(ProveedorPedido proveedorPedido) {
 	    try {
 	        proveedorPedido.setEstadoPedido(true);
-	        proveedorPedido.setPedidoPendiente(false);
+	        proveedorPedido.setDevolucionConfirmada(false);
 	        proveedorPedido.setTotal(proveedorPedido.getTotal());
 	        proveedorPedido.setCodigoFactura(proveedorPedido.getCodigoFactura());
 	        proveedorPedido.setDevolucion(proveedorPedido.getDevolucion());
@@ -161,4 +161,6 @@ public class PedidoProveedorService {
 	    }
 	    return null;
 	}
+
+
 }

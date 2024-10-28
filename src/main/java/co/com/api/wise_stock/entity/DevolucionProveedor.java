@@ -22,5 +22,13 @@ public class DevolucionProveedor {
 	private String motivo;
 	private Boolean estadoDevolucion;
 	private Date fechaDevolucion;
+	@Column(nullable = true)
+	private Boolean devolucion;
+	@Column(nullable = true)
+	private Integer cantidadDevolucion;
+	@Column(nullable = true)
+	private String motivoDevolucion;
+	@Column(nullable = true)
+	private Date fechaConfirmarDevolucion;
 
 }

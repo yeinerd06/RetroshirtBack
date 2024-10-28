@@ -39,8 +39,6 @@ public class ProveedorPedido {
 	@Column(nullable = true)
 	private Date fechaEntrega;
 	@Column(nullable = true)
-	private Boolean pedidoPendiente;
-	@Column(nullable = true)
 	private Boolean estadoPedido;
 	@Column(nullable = true)
 	private String nota;
@@ -48,6 +46,10 @@ public class ProveedorPedido {
 	private Date fechaRegistro;
 	@Column(nullable = true)
 	private Boolean devolucion;
+	@Column(nullable = true)
+	private Boolean devolucionConfirmada;
+	@Column(nullable = true)
+	private Integer totalDevolucion;
 	@OneToMany(mappedBy = "proveedorPedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ProveedorPedidoArticulo> productos;
 	

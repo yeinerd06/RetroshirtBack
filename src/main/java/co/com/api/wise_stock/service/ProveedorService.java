@@ -61,9 +61,12 @@ public class ProveedorService {
 		  Proveedor	proveedorReturn=proveedorCurrent.get();
 		  proveedorReturn.setNombre(proveedor.getNombre());
 		  proveedorReturn.setApellido(proveedor.getApellido());
+		  proveedorReturn.setEmail(proveedor.getEmail());
+		  proveedorReturn.setTelefono(proveedor.getTelefono());
+		  proveedorReturn.setDocumento(proveedor.getDocumento());;
 		  proveedorReturn.setBarrio(proveedor.getBarrio());
 		  proveedorReturn.setDireccion(proveedor.getDireccion());
-		  proveedorReturn.setEmail(proveedor.getEmail());
+		
 		  proveedorReturn.setEstado(proveedor.getEstado());
 		  
 		  return Response.crear(true, "Porveedor Actualizado", proveedorRepository.save(proveedorReturn));
