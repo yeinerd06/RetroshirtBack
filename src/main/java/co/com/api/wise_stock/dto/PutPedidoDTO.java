@@ -6,9 +6,8 @@ import co.com.api.wise_stock.enums.TipoEntregaEnum;
 import lombok.Data;
 
 @Data
-public class PostPedidoDTO {
+public class PutPedidoDTO {
     
-    private Integer idUsuario;
     private String direccionEntrega;
     private TipoEntregaEnum tipoEntrega;
     private String comprobantePago;

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import co.com.api.wise_stock.dto.EstampadoDTO;
 import co.com.api.wise_stock.service.EstampadoService;
 import co.com.api.wise_stock.util.Response;
 

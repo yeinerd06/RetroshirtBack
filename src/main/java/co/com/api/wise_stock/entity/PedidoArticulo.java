@@ -26,5 +26,9 @@ public class PedidoArticulo {
 	@JoinColumn(name="articulo_id")
 	private Articulo articulo;
 
+    @ManyToOne
+	@JoinColumn(name="estampado_id")
+	private Estampado estampado;
+
     private Integer cantidad;
 }

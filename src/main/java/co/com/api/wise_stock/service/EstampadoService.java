@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import co.com.api.wise_stock.dto.EstampadoDTO;
 import co.com.api.wise_stock.entity.Estampado;
 import co.com.api.wise_stock.repository.EstampadoRepository;
 import co.com.api.wise_stock.util.AWSS3Service;
