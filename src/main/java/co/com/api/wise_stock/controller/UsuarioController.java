@@ -33,7 +33,7 @@ public class UsuarioController {
 		return Response.crear(true, "token valido", null);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	@GetMapping
 	public Response listadoUsuarios() {
 		return usuarioService.listadoUsuarios();

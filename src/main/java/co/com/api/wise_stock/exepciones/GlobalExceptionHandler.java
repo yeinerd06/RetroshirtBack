@@ -55,4 +55,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		
 		return new ResponseEntity<>(errores,HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler(PedidoException.class)
+	public ResponseEntity<ErrorDetalles> pedidoException(PedidoException exception, WebRequest request){
+		ErrorDetalles errorDetalles = new ErrorDetalles(new Date(),exception.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetalles,HttpStatus.BAD_REQUEST);
+	}
 }

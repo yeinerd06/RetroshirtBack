@@ -57,5 +57,35 @@ public class EmailService  {
 			return false;
 		}
 	}
+
+	public boolean sendEmailPedidoListo( EmailDTO email, String emailTo) {
+		try {
+		
+			MimeMessage mimeMessageHelpe = javaMailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessageHelpe, "UTF-8");
+
+			// FECHA GENERA EL EMAIL
+			Date fecha = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("EEEE d 'de' MMMM 'de' yyyy", new Locale("es"));
+			String fechaFormateada = sdf.format(fecha);
+
+			Context context = new Context();
+			context.setVariable("titulo", email.getTitulo());
+			context.setVariable("detalle", email.getDetalle());
+			context.setVariable("fecha", fechaFormateada);
+			String htmlContent = templateEngine.process("email-pedidolisto", context);
+			messageHelper.setTo(emailTo);
+			messageHelper.setSubject(email.getAsunto());
+
+			messageHelper.setText(htmlContent, true);
+
+			javaMailSender.send(mimeMessageHelpe);
+
+			return true;
+		} catch( Exception e ) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 }

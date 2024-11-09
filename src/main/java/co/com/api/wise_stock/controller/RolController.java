@@ -18,7 +18,7 @@ public class RolController {
 	@Autowired
 	RolServicie rolServicio;
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('ADMIN')")
 	@GetMapping
 	public Response listadoRol() {
 		return rolServicio.listadoRoles();
