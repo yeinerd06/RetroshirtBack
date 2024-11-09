@@ -29,18 +29,17 @@ public class ArticuloController {
 		return articuloService.listadoArticulos();
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN', 'ALMACENISTA')")
-	@PostMapping("/save")
-	public Response saveArticulo(@RequestPart("articulo") Articulo articulo, @RequestPart("file") MultipartFile file) {
-		
-		return articuloService.saveArticulo(articulo, file);
-	}
-	
+	@PreAuthorize("hasRole('ADMIN', 'ALMACENISTA')")
 	@PutMapping("/update")
 	public Response updateArticulo(@RequestPart("articulo") Articulo articulo, @RequestPart(value="file", required = false) MultipartFile file) {
 		System.err.print(articulo.toString());
 		return articuloService.updateArticulo(articulo, file);
 	}
 
-
+	@PreAuthorize("hasAnyRole('ADMIN', 'ALMACENISTA')")
+	@PostMapping("/save")
+	public Response saveArticulo(@RequestPart("articulo") Articulo articulo, @RequestPart("file") MultipartFile file) {
+		
+		return articuloService.saveArticulo(articulo, file);
+	}
 }
