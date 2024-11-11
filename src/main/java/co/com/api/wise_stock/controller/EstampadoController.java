@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import co.com.api.wise_stock.dto.AlertaTintaDTO;
 import co.com.api.wise_stock.service.EstampadoService;
 import co.com.api.wise_stock.util.Response;
 
@@ -28,5 +30,10 @@ public class EstampadoController {
     @GetMapping
     public Response listarEstampados() {
         return estampadoService.listarEstampados();
+    }
+
+    @PostMapping("/alerta")
+    public Response alertaTinta(@RequestBody AlertaTintaDTO alertaTintaDTO ) {
+        return estampadoService.alertaTintaEstampar(alertaTintaDTO);
     }
 }

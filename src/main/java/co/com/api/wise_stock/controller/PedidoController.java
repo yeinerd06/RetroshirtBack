@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.com.api.wise_stock.dto.PostPedidoDTO;
+import co.com.api.wise_stock.dto.RechazarPedidoDTO;
 import co.com.api.wise_stock.service.PedidoService;
 import co.com.api.wise_stock.util.Response;
 
@@ -27,6 +28,7 @@ public class PedidoController {
     public Response listarPedidos() {
         return pedidoService.listarPedidos();
     }
+
     @PostMapping
     public Response crearPedido(@RequestBody PostPedidoDTO postPedidoDTO) {
         return pedidoService.crearPedido(postPedidoDTO);
@@ -40,5 +42,15 @@ public class PedidoController {
     @PatchMapping("/listo/{idPedido}")
     public Response pedidoListo(@PathVariable("idPedido") Integer idPedido) {
         return pedidoService.pedidoListo(idPedido);
+    }
+
+    @PatchMapping("/rechazar/{idPedido}")
+    public Response rechazarPedido(@PathVariable("idPedido") Integer idPedido, @RequestBody RechazarPedidoDTO rechazarPedido) {
+        return pedidoService.rechazarPedido(idPedido, rechazarPedido);
+    }
+
+    @GetMapping("/operario/{idUsuario}")
+    public Response listarPedidosOperario(@PathVariable("idUsuario") Integer idUsuario) {
+        return pedidoService.listarPedidosOperario(idUsuario);
     }
 }

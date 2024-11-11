@@ -17,6 +17,7 @@ import co.com.api.wise_stock.dto.EmailDTO;
 import co.com.api.wise_stock.dto.ArticuloDTO;
 import co.com.api.wise_stock.dto.PostPedidoDTO;
 import co.com.api.wise_stock.dto.PutPedidoDTO;
+import co.com.api.wise_stock.dto.RechazarPedidoDTO;
 import co.com.api.wise_stock.entity.Articulo;
 import co.com.api.wise_stock.entity.EstadoPedido;
 import co.com.api.wise_stock.entity.Estampado;
@@ -53,7 +54,7 @@ public class PedidoService {
     EstadoPedidoRepository estadoPedidoRepository;
 
     @Autowired
-    UsuarioReporitory usuarioReporitory;
+    UsuarioReporitory usuarioRepository;
 
 	@Autowired
 	RolUsuarioRepository rolUsuarioRepository;
@@ -77,7 +78,7 @@ public class PedidoService {
         pedido.setComprobantePago(postPedidoDTO.getComprobantePago());
         pedido.setDireccionEntrega(postPedidoDTO.getDireccionEntrega());
         pedido.setTipoEntrega(postPedidoDTO.getTipoEntrega());
-        Usuario usuario = usuarioReporitory.findById(postPedidoDTO.getIdUsuario())
+        Usuario usuario = usuarioRepository.findById(postPedidoDTO.getIdUsuario())
             .orElseThrow(() -> new PedidoException("No se encontro el cliente"));
         pedido.setUsuario(usuario);
         pedido.setFechaPedido(LocalDateTime.now().toString());
@@ -149,11 +150,8 @@ public class PedidoService {
     public Response eliminarPedido(Integer idPedido) {
 
         // Verificar si el pedido existe
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(idPedido);
-        if (!pedidoOptional.isPresent()) {
-            throw new PedidoException("El pedido no existe");
-        }
-        Pedido pedido = pedidoOptional.get();
+        Pedido pedido = validarPedido(idPedido);
+
 
         Optional<EstadoPedido> estadoPedido = estadoPedidoRepository.findByPedidoIdAndEstado(idPedido, EstadoEnum.EN_PRODUCCION);
         if(estadoPedido.isPresent()) {
@@ -173,8 +171,7 @@ public class PedidoService {
     public Response actualizarPedido(Integer idPedido, PutPedidoDTO putPedidoDTO) {
 
         // Verificar si el pedido existe
-        Pedido pedido = pedidoRepository.findById(idPedido)
-        .orElseThrow(() -> new PedidoException("El pedido no existe"));
+        Pedido pedido = validarPedido(idPedido);
 
         // Verificar si el pedido ya está en producción
         estadoPedidoRepository.findByPedidoIdAndEstado(idPedido, EstadoEnum.EN_PRODUCCION)
@@ -226,17 +223,23 @@ public class PedidoService {
             pedidoArticuloRepository.save(pedidoArticulo);
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE d 'de' MMMM 'de' yyyy", new Locale("es"));
+        LocalDateTime fechaPedido = LocalDateTime.parse(pedido.getFechaPedido());
+        String fechaFormateada = fechaPedido.format(formatter);
+
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setAsunto("Pedido actualizado");
+        emailDTO.setTitulo("El pedido de " + pedido.getUsuario().getEmail() + " ha sido actualizado");
+        emailDTO.setDetalle("El pedido realizado el " + fechaFormateada + "ha sido actualizado para que revises los cambios");
+        emailService.sendEmailPedidoListo(emailDTO, pedido.getOperarioAsignado().getEmail());
+
+
         return Response.crear(true, "Pedido actualizado con exito", null);
     }
 
     public Response pedidoListo(Integer idPedido) {
         
-        // Verificar si el pedido existe
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(idPedido);
-        if (!pedidoOptional.isPresent()) {
-            throw new PedidoException("El pedido no existe");
-        }
-        Pedido pedido = pedidoOptional.get();
+        Pedido pedido = validarPedido(idPedido);
 
         Optional<EstadoPedido> estadoPedido = estadoPedidoRepository.findByPedidoIdAndEstado(idPedido, EstadoEnum.EN_PRODUCCION);
         if(!estadoPedido.isPresent()) {
@@ -266,4 +269,47 @@ public class PedidoService {
         emailService.sendEmailPedidoListo(emailDTO, admins.get(0).getUsuario().getEmail());
         return Response.crear(true, "Pedido terminado exitosamente", null);
     } 
+
+    public Response rechazarPedido(Integer idPedido, RechazarPedidoDTO rechazarPedido) {
+        Pedido pedido = validarPedido(idPedido);
+
+
+        EstadoPedido pedidoRechazado = new EstadoPedido();
+        pedidoRechazado.setPedido(pedido);
+        pedidoRechazado.setFechaCambio(LocalDateTime.now().toString());
+        pedidoRechazado.setEstado(EstadoEnum.RECHAZADO);
+        estadoPedidoRepository.save(pedidoRechazado);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE d 'de' MMMM 'de' yyyy", new Locale("es"));
+        LocalDateTime fechaPedido = LocalDateTime.parse(pedido.getFechaPedido());
+        String fechaFormateada = fechaPedido.format(formatter);
+
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setAsunto("Pedido rechazado");
+        emailDTO.setTitulo("Pedido rechazado");
+        emailDTO.setDetalle("El pedido realizado el " + fechaFormateada + " ha sido rechazado, por los siguientes motivos:  \n" + rechazarPedido.getMotivo());
+        emailService.sendEmailPedidoListo(emailDTO, pedido.getUsuario().getEmail());
+
+
+        return Response.crear(true, "Pedido rechazado exitosamente", null);
+    }
+
+    private Pedido validarPedido(Integer idPedido) {
+        // Verificar si el pedido existe
+        Optional<Pedido> pedidoOptional = pedidoRepository.findById(idPedido);
+        if (!pedidoOptional.isPresent()) {
+            throw new PedidoException("El pedido no existe");
+        }
+        return pedidoOptional.get();
+    }
+
+    public Response listarPedidosOperario(Integer idUsuario) {
+        Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
+        if (!usuario.isPresent()) {
+            throw new PedidoException("El operario no existe");
+        }
+
+        List<Pedido> pedido = pedidoRepository.findByOperarioAsignado(usuario.get());
+        return Response.crear(true, "Listado de pedidos", pedidoArticuloRepository.findByPedidoIn(pedido));
+    }
 }

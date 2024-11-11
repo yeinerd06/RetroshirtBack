@@ -6,5 +6,6 @@ public enum EstadoEnum {
     EN_PRODUCCION,
     TERMINADO,
     ENTREGADO,
-    CANCELADO
+    CANCELADO,
+    RECHAZADO
 }

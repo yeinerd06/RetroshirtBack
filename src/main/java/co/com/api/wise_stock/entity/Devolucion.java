@@ -1,7 +1,7 @@
 package co.com.api.wise_stock.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,23 +13,19 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="pedido_articulo")
-public class PedidoArticulo {
+@Table(name="devolucion")
+public class Devolucion {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
     @ManyToOne
 	@JoinColumn(name="pedido_id")
 	private Pedido pedido;
+    
+	private String motivo;
 
-    @ManyToOne
-	@JoinColumn(name="articulo_id")
-	private Articulo articulo;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="estampado_id")
-	private Estampado estampado;
-
-    private Integer cantidad;
+    @Column( name = "fecha_devolucion")
+    private String fechaDevolucion;
 }

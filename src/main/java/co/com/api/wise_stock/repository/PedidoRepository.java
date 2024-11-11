@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import co.com.api.wise_stock.entity.Pedido;
+import co.com.api.wise_stock.entity.Usuario;
+
 import java.util.List;
 
 
@@ -16,4 +18,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer>{
             @Param("fechaInicio") String fechaInicio,
             @Param("fechaFin") String fechaFin
     );
+
+    List<Pedido> findByOperarioAsignado(Usuario operarioAsignado);
 }
