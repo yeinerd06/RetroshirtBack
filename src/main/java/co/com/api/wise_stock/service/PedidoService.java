@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.com.api.wise_stock.dto.EmailDTO;
+import co.com.api.wise_stock.dto.PatchPedidoDTO;
 import co.com.api.wise_stock.dto.ArticuloDTO;
 import co.com.api.wise_stock.dto.PostPedidoDTO;
 import co.com.api.wise_stock.dto.PutPedidoDTO;
@@ -294,15 +295,6 @@ public class PedidoService {
         return Response.crear(true, "Pedido rechazado exitosamente", null);
     }
 
-    private Pedido validarPedido(Integer idPedido) {
-        // Verificar si el pedido existe
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(idPedido);
-        if (!pedidoOptional.isPresent()) {
-            throw new PedidoException("El pedido no existe");
-        }
-        return pedidoOptional.get();
-    }
-
     public Response listarPedidosOperario(Integer idUsuario) {
         Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
         if (!usuario.isPresent()) {
@@ -312,4 +304,38 @@ public class PedidoService {
         List<Pedido> pedido = pedidoRepository.findByOperarioAsignado(usuario.get());
         return Response.crear(true, "Listado de pedidos", pedidoArticuloRepository.findByPedidoIn(pedido));
     }
+
+    public Response detallePedido(Integer idPedido) {
+        Pedido pedido = validarPedido(idPedido);
+        return Response.crear(true, "Detalle pedido", pedidoArticuloRepository.findByPedido(pedido));
+    }
+
+    public Response actualizarFechaEstimadaEntrge(Integer idPedido, PatchPedidoDTO patchPedidoDTO) {
+        Pedido pedido = validarPedido(idPedido);
+        pedido.setFechaEstimadaEntrega(patchPedidoDTO.getFecha());
+        pedidoRepository.save(pedido);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE d 'de' MMMM 'de' yyyy", new Locale("es"));
+        LocalDateTime fechaPedido = LocalDateTime.parse(pedido.getFechaPedido());
+        String fechaFormateada = fechaPedido.format(formatter);
+        LocalDateTime fechaEstimada = LocalDateTime.parse(patchPedidoDTO.getFecha()); // Asegúrate de que esta fecha esté en un formato compatible
+        String fechaEstimadaFormateada = fechaEstimada.format(formatter);
+
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setAsunto("Fecha estimada de entrega actualizada");
+        emailDTO.setTitulo("La fecha rechazado");
+        emailDTO.setDetalle("Al pedido realizado el " + fechaFormateada + " sel ha modificado la fecha estimada de entrega para el " + fechaEstimadaFormateada);
+        emailService.sendEmailPedidoListo(emailDTO, pedido.getUsuario().getEmail());
+
+        return Response.crear(true, "Fecha estimada de entrega actualizada", null);
+    }
+    private Pedido validarPedido(Integer idPedido) {
+        // Verificar si el pedido existe
+        Optional<Pedido> pedidoOptional = pedidoRepository.findById(idPedido);
+        if (!pedidoOptional.isPresent()) {
+            throw new PedidoException("El pedido no existe");
+        }
+        return pedidoOptional.get();
+    }
+
 }

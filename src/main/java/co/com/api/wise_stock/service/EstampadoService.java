@@ -68,4 +68,5 @@ public class EstampadoService {
 
         return Response.crear(true, "Alerta generada exitosamente", null);
     }
+
 }

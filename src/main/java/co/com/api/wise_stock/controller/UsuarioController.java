@@ -1,6 +1,7 @@
 package co.com.api.wise_stock.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -73,6 +74,21 @@ public class UsuarioController {
 			@RequestBody CodigoCambio codigoCurren) {
 
 		return usuarioService.validarCodigoCambioPassword(uuid, codigo, codigoCurren);
+	}
+
+	@PostMapping( value = "/cliente")
+	public Response registrarCliente(
+	@RequestPart("nombre") String nombre, 
+    @RequestPart("apellido") String apellido, 
+    @RequestPart("email") String email, 
+    @RequestPart("password") String password, 
+    @RequestPart("file") MultipartFile file) {
+		UsuarioDto usuarioDto = new UsuarioDto();
+		usuarioDto.setNombre(nombre);
+		usuarioDto.setApellido(apellido);
+		usuarioDto.setEmail(email);
+		usuarioDto.setPassword(password);
+		return usuarioService.registrarCliente(usuarioDto, file);
 	}
 
 }

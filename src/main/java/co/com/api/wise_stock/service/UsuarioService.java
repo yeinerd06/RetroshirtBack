@@ -81,17 +81,6 @@ public class UsuarioService {
 
 		return Response.crear(false, "Error", null);
 	}
-	/*
-	  System.err.println(usuario.toString());
-	    try {
-	    	
-	    	
-	    } catch (Exception e) {
-	        // Manejar la excepción
-	        //e.printStackTrace();
-	        return Response.crear(false, "Error", null);
-	    }
-	 */
 
 	public Response updateUsuario(UsuarioDto usuario, MultipartFile file) {
 		
@@ -225,6 +214,34 @@ public class UsuarioService {
 		int min = (int) Math.pow(10, longitud - 1);
 		int max = (int) Math.pow(10, longitud) - 1;
 		return random.nextInt(max - min + 1) + min;
+	}
+
+	public Response registrarCliente(UsuarioDto usuarioDto, MultipartFile file) {
+		Optional<Usuario> usuarioOptional = usuarioReporitory.findByEmail(usuarioDto.getEmail().toUpperCase());
+
+		if (usuarioOptional.isPresent()) {
+			return Response.crear(false, "Usuario ya esta registrado", null);
+		}
+
+		Usuario usuario = new Usuario();
+		usuario.setNombre(usuarioDto.getNombre());
+		usuario.setApellido(usuarioDto.getApellido());
+		usuario.setEmail(usuarioDto.getEmail().toUpperCase());
+		usuario.setPassword(passwordEncoder.encode(usuarioDto.getPassword()));
+		usuario.setFecha(new Date());
+		usuario.setEstado(true);
+		if (!file.isEmpty()) {
+			String url = awss3Service.createFolderFile(rutaPerfil, file);
+			usuario.setImagen(url);
+		}
+		Optional<Rol> rol = rolRepository.findById(2);
+		Usuario usuarioReturn = usuarioReporitory.save(usuario);
+		RolUsuario rolUsuario = new RolUsuario();
+		rolUsuario.setUsuario(usuarioReturn);
+		rolUsuario.setRolId(rol.get().getId());
+		rolUsuarioRepository.save(rolUsuario);
+
+		return Response.crear(true, "Usuario registrado exitosamente", null);
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.com.api.wise_stock.dto.PatchPedidoDTO;
 import co.com.api.wise_stock.dto.PostPedidoDTO;
 import co.com.api.wise_stock.dto.RechazarPedidoDTO;
 import co.com.api.wise_stock.service.PedidoService;
@@ -52,5 +53,15 @@ public class PedidoController {
     @GetMapping("/operario/{idUsuario}")
     public Response listarPedidosOperario(@PathVariable("idUsuario") Integer idUsuario) {
         return pedidoService.listarPedidosOperario(idUsuario);
+    }
+
+    @GetMapping("/detalle/{idPedido}")
+    public Response detallePedido(@PathVariable("idPedido") Integer idPedido) {
+        return pedidoService.detallePedido(idPedido);
+    }
+
+    @PatchMapping("/fechaEstimada/{idPedido}")
+    public Response actualizarFechaEstimadaEntrega(@PathVariable("idPedido") Integer idPedido, @RequestBody PatchPedidoDTO patchPedidoDTO) {
+        return pedidoService.actualizarFechaEstimadaEntrge(idPedido, patchPedidoDTO);
     }
 }
