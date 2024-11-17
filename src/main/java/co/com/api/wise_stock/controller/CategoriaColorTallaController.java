@@ -42,6 +42,7 @@ public class CategoriaColorTallaController {
 	public Response saveCategoria(@RequestBody Color color) {
 		return categoriaColorTallaService.saveColor(color);
 	}
+	//Prueba de comentarios
 	@PostMapping("/talla/save")
 	public Response saveCategoria(@RequestBody Talla talla) {
 		return categoriaColorTallaService.saveTalla(talla);
