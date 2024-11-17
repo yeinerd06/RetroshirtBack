@@ -1,7 +1,5 @@
 package co.com.api.wise_stock.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +13,9 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="devolucion")
-public class Devolucion {
-    
-    @Id
+@Table(name="reclamacion")
+public class Reclamacion {
+        @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
@@ -30,16 +27,16 @@ public class Devolucion {
 
 	private Integer cantidad;
 
-    @Column( name = "fecha_devolucion")
-    private String fechaDevolucion;
+    @Column( name = "fecha_reclamacion")
+    private String fechaReclamacion;
 
-	@Column( name = "fecha_conrfirmardevolucion", nullable = true)
-	private String fechaConfirmarDevolucion;
+	@Column( name = "fecha_conrfirmarreclamacion", nullable = true)
+	private String fechaConfirmarReclamacion;
 
-	private Boolean devolucion;
+	private Boolean reclamacion;
 
-	private String motivoDevolucion;
+	private String motivoReclamacion;
 	
 	@Column(nullable = true)
-	private Integer cantidadDevolucion;
+	private Integer cantidadReclamacion;
 }
